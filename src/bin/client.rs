@@ -1,13 +1,13 @@
 use std::convert::TryInto;
 
-use libzm::{prelude::*, ClientBuilder, TcpAddr};
-use structOpt::StructOpt;
+use libzmq::{prelude::*, ClientBuilder, TcpAddr};
+use structopt::StructOpt;
 
 use examples::{self, Result};
 
 const PING: &str = "PING";
 
-#[derive(StrucOpt)]
+#[derive(StructOpt)]
 struct Options {
     server_ip: String
 }
@@ -15,9 +15,9 @@ struct Options {
 fn main() -> Result<()> {
     let options = Options::from_args();
     let endpoint: TcpAddr = format!("{}:{}", options.server_ip, examples::SERVER_PORT).try_into()?;
-    le client = ClientBuilder::new().connect(endpoint).build()?;
+    let client = ClientBuilder::new().connect(endpoint).build()?;
 
-    client.send(PING);
+    client.send(PING)?;
     let message = client.recv_msg()?;
     println!("Messag arrivant : {}", message.to_str()?);
     Ok(())

@@ -14,6 +14,7 @@ fn main() -> Result<()> {
         let received_message = server.recv_msg()?;
         println!("Message arrivant : {}", received_message.to_str()?);
         let mut message_to_send = Msg::from(PONG);
+        let client_id = received_message.routing_id().expect("Id. client");
         message_to_send.set_routing_id(client_id);
         server.send(message_to_send)?;
     }
